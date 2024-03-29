@@ -1,0 +1,1 @@
+Information system to store and search for scientific papers in the field of cardiogenetics. The system utilizes a client-server model (MVC) with a relational database on the server side and a web interface on the client side. The app enables more precise searches within the cardiogenetics domain.
