@@ -1,0 +1,51 @@
+﻿@model IEnumerable<WebPubApp.Person>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>People</h2>
+
+<form asp-controller="People" asp-action="Index">
+    <p>
+        First or second name: <input type="text" name="title" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
+<p>
+    @ViewBag.SearchInfo
+</p>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.SecondName)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.OrderBy(x => x.SecondName))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            </td>
+        </tr>
+    }
+
+</table>

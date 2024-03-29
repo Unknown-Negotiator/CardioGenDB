@@ -1,0 +1,68 @@
+﻿@model IEnumerable<WebPubApp.Authorship>
+
+@{
+    ViewBag.Title = "Authorships";
+}
+
+<h2>Authorships</h2>
+
+<form asp-controller="Authorships" asp-action="Index">
+    <p>
+        Publication title: <input type="text" name="title" />
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
+<p>
+    @ViewBag.SearchInfo
+</p>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Position)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrgBranch.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Person.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Person.SecondName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Publication.Title)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (Authorship item in Model.OrderBy(x => x.Publication.Title))
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrgBranch.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person.SecondName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publication.Title)
+            </td>
+            <td>
+                @Html.ActionLink(linkText: "Delete", actionName: "Delete", controllerName: "Authorships", routeValues: new { personId = item.PersonID, pmid = item.PMID, branchId = item.BranchID },
+            htmlAttributes: null)
+            </td>
+        </tr>
+    }
+
+</table>

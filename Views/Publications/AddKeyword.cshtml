@@ -1,0 +1,27 @@
+﻿@model WebPubApp.Publication
+
+@{
+    ViewBag.Title = "AddKeyword";
+}
+
+<h2>Add Keyword</h2>
+
+<form asp-controller="Publications" asp-action="AddKeyword" method="post">
+    @Html.AntiForgeryToken()
+    <p>
+        <select asp-for="articleType" asp-items=@Html.DropDownList("wordId", ViewBag.Keywords as SelectList, "Select keyword")
+        </select>
+
+        <input type="submit" value="Add" />
+    </p>
+</form>
+
+<div>
+    @Html.ActionLink(linkText: "Edti general keywords list", actionName: "Index", controllerName: "Keywords")
+</div>
+
+<div>
+    @Html.ActionLink(linkText: "Back", actionName: "DisplayKeywords", routeValues: new { pmid = Model.PMID })
+</div>
+
+

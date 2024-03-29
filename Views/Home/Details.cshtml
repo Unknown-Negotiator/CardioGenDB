@@ -1,0 +1,175 @@
+﻿@model WebPubApp.Publication
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Publication</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Volume)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Volume)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Issue)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Issue)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pages)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pages)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Link)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Link)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Free)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Free)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Abstract)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Abstract)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ArticleType.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ArticleType.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Journal.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Journal.Title)
+        </dd>
+
+        <dt>
+            @Html.LabelFor(model => model.Keywords)
+        </dt>
+
+        <dd>
+            <p>
+                @{
+                    string keywords = "";
+                    foreach (Keyword key in Model.Keywords)
+                    {
+                        keywords += key.Word.TrimEnd(' ') + ", ";
+                    }
+                    @keywords.TrimEnd(',', ' ')
+                }
+            </p>
+        </dd>
+    </dl>
+</div>
+
+<h4>
+    Authors' affiliations:
+</h4>
+<table class="table">
+    <tr>
+        <th>
+            Position
+        </th>
+        <th>
+            First name
+        </th>
+        <th>
+            Second name
+        </th>
+        <th>
+            Organization branch
+        </th>
+        <th>
+            Country
+        </th>
+        <th>
+            Organization
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (Authorship item in Model.Authorships)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Position)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Person.SecondName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrgBranch.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrgBranch.Country.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrgBranch.Organization.Title)
+            </td>
+        </tr>
+    }
+
+</table>
+
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+

@@ -1,0 +1,641 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище Model" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ArticleKeywords">
+          <Key>
+            <PropertyRef Name="KeywordID" />
+            <PropertyRef Name="PMID" />
+          </Key>
+          <Property Name="KeywordID" Type="int" Nullable="false" />
+          <Property Name="PMID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ArticleType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Authorship">
+          <Key>
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="PMID" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="PersonID" Type="int" Nullable="false" />
+          <Property Name="PMID" Type="int" Nullable="false" />
+          <Property Name="BranchID" Type="int" Nullable="false" />
+          <Property Name="Position" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Journal">
+          <Key>
+            <PropertyRef Name="ISSN" />
+          </Key>
+          <Property Name="ISSN" Type="nvarchar" MaxLength="9" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Keyword">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Word" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Organization">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="OrgBranch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="OrgID" Type="int" Nullable="false" />
+          <Property Name="CountryID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="SecondName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Publication">
+          <Key>
+            <PropertyRef Name="PMID" />
+          </Key>
+          <Property Name="PMID" Type="int" Nullable="false" />
+          <Property Name="ISSN" Type="nvarchar" MaxLength="9" Nullable="false" />
+          <Property Name="TypeID" Type="int" />
+          <Property Name="Title" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Volume" Type="int" />
+          <Property Name="Issue" Type="int" Nullable="false" />
+          <Property Name="Pages" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Date" Type="date" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Link" Type="nvarchar" MaxLength="50" />
+          <Property Name="Free" Type="bit" />
+          <Property Name="Abstract" Type="text" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_ArticleKeywords_Keyword">
+          <End Role="Keyword" Type="Self.Keyword" Multiplicity="1" />
+          <End Role="ArticleKeywords" Type="Self.ArticleKeywords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Keyword">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ArticleKeywords">
+              <PropertyRef Name="KeywordID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ArticleKeywords_Publication">
+          <End Role="Publication" Type="Self.Publication" Multiplicity="1" />
+          <End Role="ArticleKeywords" Type="Self.ArticleKeywords" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publication">
+              <PropertyRef Name="PMID" />
+            </Principal>
+            <Dependent Role="ArticleKeywords">
+              <PropertyRef Name="PMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Authorship_OrgBranch">
+          <End Role="OrgBranch" Type="Self.OrgBranch" Multiplicity="1" />
+          <End Role="Authorship" Type="Self.Authorship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgBranch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Authorship">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Authorship_Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="Authorship" Type="Self.Authorship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Authorship">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Authorship_Publication">
+          <End Role="Publication" Type="Self.Publication" Multiplicity="1" />
+          <End Role="Authorship" Type="Self.Authorship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publication">
+              <PropertyRef Name="PMID" />
+            </Principal>
+            <Dependent Role="Authorship">
+              <PropertyRef Name="PMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrgBranch_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="OrgBranch" Type="Self.OrgBranch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrgBranch">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrgBranch_Organization">
+          <End Role="Organization" Type="Self.Organization" Multiplicity="1" />
+          <End Role="OrgBranch" Type="Self.OrgBranch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrgBranch">
+              <PropertyRef Name="OrgID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publication_ArticleType">
+          <End Role="ArticleType" Type="Self.ArticleType" Multiplicity="0..1" />
+          <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ArticleType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Publication">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publication_Journal">
+          <End Role="Journal" Type="Self.Journal" Multiplicity="1" />
+          <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Journal">
+              <PropertyRef Name="ISSN" />
+            </Principal>
+            <Dependent Role="Publication">
+              <PropertyRef Name="ISSN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ModelContainer">
+          <EntitySet Name="ArticleKeywords" EntityType="Self.ArticleKeywords" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ArticleType" EntityType="Self.ArticleType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Authorship" EntityType="Self.Authorship" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Journal" EntityType="Self.Journal" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Keyword" EntityType="Self.Keyword" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Organization" EntityType="Self.Organization" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrgBranch" EntityType="Self.OrgBranch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Publication" EntityType="Self.Publication" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_ArticleKeywords_Keyword" Association="Self.FK_ArticleKeywords_Keyword">
+            <End Role="Keyword" EntitySet="Keyword" />
+            <End Role="ArticleKeywords" EntitySet="ArticleKeywords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ArticleKeywords_Publication" Association="Self.FK_ArticleKeywords_Publication">
+            <End Role="Publication" EntitySet="Publication" />
+            <End Role="ArticleKeywords" EntitySet="ArticleKeywords" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Authorship_OrgBranch" Association="Self.FK_Authorship_OrgBranch">
+            <End Role="OrgBranch" EntitySet="OrgBranch" />
+            <End Role="Authorship" EntitySet="Authorship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Authorship_Person" Association="Self.FK_Authorship_Person">
+            <End Role="Person" EntitySet="Person" />
+            <End Role="Authorship" EntitySet="Authorship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Authorship_Publication" Association="Self.FK_Authorship_Publication">
+            <End Role="Publication" EntitySet="Publication" />
+            <End Role="Authorship" EntitySet="Authorship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrgBranch_Country" Association="Self.FK_OrgBranch_Country">
+            <End Role="Country" EntitySet="Country" />
+            <End Role="OrgBranch" EntitySet="OrgBranch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrgBranch_Organization" Association="Self.FK_OrgBranch_Organization">
+            <End Role="Organization" EntitySet="Organization" />
+            <End Role="OrgBranch" EntitySet="OrgBranch" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_ArticleType" Association="Self.FK_Publication_ArticleType">
+            <End Role="ArticleType" EntitySet="ArticleType" />
+            <End Role="Publication" EntitySet="Publication" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Journal" Association="Self.FK_Publication_Journal">
+            <End Role="Journal" EntitySet="Journal" />
+            <End Role="Publication" EntitySet="Publication" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ArticleType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Publications" Relationship="Self.FK_Publication_ArticleType" FromRole="ArticleType" ToRole="Publication" />
+        </EntityType>
+        <EntityType Name="Authorship">
+          <Key>
+            <PropertyRef Name="PersonID" />
+            <PropertyRef Name="PMID" />
+            <PropertyRef Name="BranchID" />
+          </Key>
+          <Property Name="PersonID" Type="Int32" Nullable="false" />
+          <Property Name="PMID" Type="Int32" Nullable="false" />
+          <Property Name="BranchID" Type="Int32" Nullable="false" />
+          <Property Name="Position" Type="Int16" Nullable="false" />
+          <NavigationProperty Name="OrgBranch" Relationship="Self.FK_Authorship_OrgBranch" FromRole="Authorship" ToRole="OrgBranch" />
+          <NavigationProperty Name="Person" Relationship="Self.FK_Authorship_Person" FromRole="Authorship" ToRole="Person" />
+          <NavigationProperty Name="Publication" Relationship="Self.FK_Authorship_Publication" FromRole="Authorship" ToRole="Publication" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="OrgBranches" Relationship="Self.FK_OrgBranch_Country" FromRole="Country" ToRole="OrgBranch" />
+        </EntityType>
+        <EntityType Name="Journal">
+          <Key>
+            <PropertyRef Name="ISSN" />
+          </Key>
+          <Property Name="ISSN" Type="String" MaxLength="9" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Publications" Relationship="Self.FK_Publication_Journal" FromRole="Journal" ToRole="Publication" />
+        </EntityType>
+        <EntityType Name="Keyword">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Word" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Publications" Relationship="Self.ArticleKeywords" FromRole="Keyword" ToRole="Publication" />
+        </EntityType>
+        <EntityType Name="Organization">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="OrgBranches" Relationship="Self.FK_OrgBranch_Organization" FromRole="Organization" ToRole="OrgBranch" />
+        </EntityType>
+        <EntityType Name="OrgBranch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="OrgID" Type="Int32" Nullable="false" />
+          <Property Name="CountryID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Authorships" Relationship="Self.FK_Authorship_OrgBranch" FromRole="OrgBranch" ToRole="Authorship" />
+          <NavigationProperty Name="Country" Relationship="Self.FK_OrgBranch_Country" FromRole="OrgBranch" ToRole="Country" />
+          <NavigationProperty Name="Organization" Relationship="Self.FK_OrgBranch_Organization" FromRole="OrgBranch" ToRole="Organization" />
+        </EntityType>
+        <EntityType Name="Person">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SecondName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Authorships" Relationship="Self.FK_Authorship_Person" FromRole="Person" ToRole="Authorship" />
+        </EntityType>
+        <EntityType Name="Publication">
+          <Key>
+            <PropertyRef Name="PMID" />
+          </Key>
+          <Property Name="PMID" Type="Int32" Nullable="false" />
+          <Property Name="ISSN" Type="String" MaxLength="9" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="TypeID" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Volume" Type="Int32" />
+          <Property Name="Issue" Type="Int32" Nullable="false" />
+          <Property Name="Pages" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Link" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Free" Type="Boolean" />
+          <Property Name="Abstract" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ArticleType" Relationship="Self.FK_Publication_ArticleType" FromRole="Publication" ToRole="ArticleType" />
+          <NavigationProperty Name="Authorships" Relationship="Self.FK_Authorship_Publication" FromRole="Publication" ToRole="Authorship" />
+          <NavigationProperty Name="Journal" Relationship="Self.FK_Publication_Journal" FromRole="Publication" ToRole="Journal" />
+          <NavigationProperty Name="Keywords" Relationship="Self.ArticleKeywords" FromRole="Publication" ToRole="Keyword" />
+        </EntityType>
+        <EntityType Name="sysdiagram">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_Publication_ArticleType">
+          <End Role="ArticleType" Type="Self.ArticleType" Multiplicity="0..1" />
+          <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ArticleType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Publication">
+              <PropertyRef Name="TypeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Authorship_OrgBranch">
+          <End Role="OrgBranch" Type="Self.OrgBranch" Multiplicity="1" />
+          <End Role="Authorship" Type="Self.Authorship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OrgBranch">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Authorship">
+              <PropertyRef Name="BranchID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Authorship_Person">
+          <End Role="Person" Type="Self.Person" Multiplicity="1" />
+          <End Role="Authorship" Type="Self.Authorship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Person">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Authorship">
+              <PropertyRef Name="PersonID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Authorship_Publication">
+          <End Role="Publication" Type="Self.Publication" Multiplicity="1" />
+          <End Role="Authorship" Type="Self.Authorship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Publication">
+              <PropertyRef Name="PMID" />
+            </Principal>
+            <Dependent Role="Authorship">
+              <PropertyRef Name="PMID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrgBranch_Country">
+          <End Role="Country" Type="Self.Country" Multiplicity="1" />
+          <End Role="OrgBranch" Type="Self.OrgBranch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Country">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrgBranch">
+              <PropertyRef Name="CountryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Publication_Journal">
+          <End Role="Journal" Type="Self.Journal" Multiplicity="1" />
+          <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Journal">
+              <PropertyRef Name="ISSN" />
+            </Principal>
+            <Dependent Role="Publication">
+              <PropertyRef Name="ISSN" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_OrgBranch_Organization">
+          <End Role="Organization" Type="Self.Organization" Multiplicity="1" />
+          <End Role="OrgBranch" Type="Self.OrgBranch" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Organization">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="OrgBranch">
+              <PropertyRef Name="OrgID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="ArticleKeywords">
+          <End Role="Keyword" Type="Self.Keyword" Multiplicity="*" />
+          <End Role="Publication" Type="Self.Publication" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ArticleTypes" EntityType="Self.ArticleType" />
+          <EntitySet Name="Authorships" EntityType="Self.Authorship" />
+          <EntitySet Name="Countries" EntityType="Self.Country" />
+          <EntitySet Name="Journals" EntityType="Self.Journal" />
+          <EntitySet Name="Keywords" EntityType="Self.Keyword" />
+          <EntitySet Name="Organizations" EntityType="Self.Organization" />
+          <EntitySet Name="OrgBranches" EntityType="Self.OrgBranch" />
+          <EntitySet Name="People" EntityType="Self.Person" />
+          <EntitySet Name="Publications" EntityType="Self.Publication" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+          <AssociationSet Name="FK_Publication_ArticleType" Association="Self.FK_Publication_ArticleType">
+            <End Role="ArticleType" EntitySet="ArticleTypes" />
+            <End Role="Publication" EntitySet="Publications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Authorship_OrgBranch" Association="Self.FK_Authorship_OrgBranch">
+            <End Role="OrgBranch" EntitySet="OrgBranches" />
+            <End Role="Authorship" EntitySet="Authorships" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Authorship_Person" Association="Self.FK_Authorship_Person">
+            <End Role="Person" EntitySet="People" />
+            <End Role="Authorship" EntitySet="Authorships" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Authorship_Publication" Association="Self.FK_Authorship_Publication">
+            <End Role="Publication" EntitySet="Publications" />
+            <End Role="Authorship" EntitySet="Authorships" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrgBranch_Country" Association="Self.FK_OrgBranch_Country">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="OrgBranch" EntitySet="OrgBranches" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Publication_Journal" Association="Self.FK_Publication_Journal">
+            <End Role="Journal" EntitySet="Journals" />
+            <End Role="Publication" EntitySet="Publications" />
+          </AssociationSet>
+          <AssociationSet Name="FK_OrgBranch_Organization" Association="Self.FK_OrgBranch_Organization">
+            <End Role="Organization" EntitySet="Organizations" />
+            <End Role="OrgBranch" EntitySet="OrgBranches" />
+          </AssociationSet>
+          <AssociationSet Name="ArticleKeywords" Association="Self.ArticleKeywords">
+            <End Role="Keyword" EntitySet="Keywords" />
+            <End Role="Publication" EntitySet="Publications" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ModelContainer" CdmEntityContainer="Entities">
+          <EntitySetMapping Name="ArticleTypes">
+            <EntityTypeMapping TypeName="Model.ArticleType">
+              <MappingFragment StoreEntitySet="ArticleType">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Authorships">
+            <EntityTypeMapping TypeName="Model.Authorship">
+              <MappingFragment StoreEntitySet="Authorship">
+                <ScalarProperty Name="PersonID" ColumnName="PersonID" />
+                <ScalarProperty Name="PMID" ColumnName="PMID" />
+                <ScalarProperty Name="BranchID" ColumnName="BranchID" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Countries">
+            <EntityTypeMapping TypeName="Model.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Journals">
+            <EntityTypeMapping TypeName="Model.Journal">
+              <MappingFragment StoreEntitySet="Journal">
+                <ScalarProperty Name="ISSN" ColumnName="ISSN" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Keywords">
+            <EntityTypeMapping TypeName="Model.Keyword">
+              <MappingFragment StoreEntitySet="Keyword">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Word" ColumnName="Word" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Organizations">
+            <EntityTypeMapping TypeName="Model.Organization">
+              <MappingFragment StoreEntitySet="Organization">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="OrgBranches">
+            <EntityTypeMapping TypeName="Model.OrgBranch">
+              <MappingFragment StoreEntitySet="OrgBranch">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="OrgID" ColumnName="OrgID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="People">
+            <EntityTypeMapping TypeName="Model.Person">
+              <MappingFragment StoreEntitySet="Person">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="SecondName" ColumnName="SecondName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Publications">
+            <EntityTypeMapping TypeName="Model.Publication">
+              <MappingFragment StoreEntitySet="Publication">
+                <ScalarProperty Name="PMID" ColumnName="PMID" />
+                <ScalarProperty Name="ISSN" ColumnName="ISSN" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Volume" ColumnName="Volume" />
+                <ScalarProperty Name="Issue" ColumnName="Issue" />
+                <ScalarProperty Name="Pages" ColumnName="Pages" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="Free" ColumnName="Free" />
+                <ScalarProperty Name="Abstract" ColumnName="Abstract" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="Model.sysdiagram">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="ArticleKeywords" TypeName="Model.ArticleKeywords" StoreEntitySet="ArticleKeywords">
+            <EndProperty Name="Keyword">
+              <ScalarProperty Name="ID" ColumnName="KeywordID" />
+            </EndProperty>
+            <EndProperty Name="Publication">
+              <ScalarProperty Name="PMID" ColumnName="PMID" />
+            </EndProperty>
+          </AssociationSetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

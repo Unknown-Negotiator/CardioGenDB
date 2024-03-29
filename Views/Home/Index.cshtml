@@ -1,0 +1,99 @@
+﻿@model IEnumerable<WebPubApp.Publication>
+
+@{
+    ViewBag.Title = "Home";
+}
+
+<h2>Publications</h2>
+
+<form asp-controller="Publications" asp-action="Index" method="get">
+    <p>
+    <p>
+        <select asp-for="typeId" asp-items=@Html.DropDownList("typeId", ViewBag.Types as SelectList, "Select Article type")
+        </select>
+
+        <select asp-for="countryId" asp-items=@Html.DropDownList("countryId", ViewBag.Countries as SelectList, "Select Country")
+        </select>
+    </p>
+
+    <p>
+        Title: <input type="text" name="title" />
+        Author: <input type="text" name="author" />
+        Journal: <input type="text" name="journal" />
+
+        <label class="checkbox-inline" for="onlyFree">
+            <input type="checkbox" name="onlyFree" id="checkboxes-0" value="true">
+            Only free
+        </label>
+    </p>
+
+    <p>
+        Organization: <input type="text" name="orgBranch" />
+        Keywords: <input type="text" name="keywords" minlength="3" size="100" />
+        Year: <input type="number" name="year" />
+    </p>
+
+    <p>
+        <input type="submit" value="Search" />
+    </p>
+</form>
+
+<p>
+    @ViewBag.SearchInfo
+</p>
+
+<p>
+    @Html.ActionLink("Export CSV", "DownloadCSV", "Home", new { searchInfo = ViewBag.SearchInfo }, null)
+</p>
+
+<table class="table">
+    <tr>
+        <th>
+            PubMed
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Year)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Free)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ArticleType.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Journal.Title)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a href=@item.Link>Open in PubMed</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>       
+                @Html.DisplayFor(modelItem => item.Year)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Free)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArticleType.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Journal.Title)
+            </td>
+            <td>               
+                @Html.ActionLink("Details", "Details", new { id = item.PMID })
+            </td>
+        </tr>
+    }
+
+</table>
